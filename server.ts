@@ -221,6 +221,9 @@ app.post('/api/video-download', async (req, res) => {
   }
 });
 
+// Serve static files from public directory (favicons, sitemap, verification files)
+app.use(express.static(path.resolve(__dirname, 'public')));
+
 // Start server with Vite middleware in dev or static files in prod
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
