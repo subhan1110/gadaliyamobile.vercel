@@ -31,16 +31,7 @@ export const SkinStudio: React.FC = () => {
   const [customerPhoneModel, setCustomerPhoneModel] = useState('');
   const [zoomImage, setZoomImage] = useState<SkinPhotoItem | null>(null);
 
-  const categories = [
-    'All',
-    'Devotional & Spiritual',
-    'Supercars & Racing',
-    'Wildlife & Royalty',
-    'Heritage & Traditional',
-    'Superbikes & Moto',
-    '3D Geometric & Texture',
-    'Travel & Lifestyle',
-  ];
+  const categories = ['All', ...Array.from(new Set(PHOTO_SKINS.map((skin) => skin.category)))];
 
   const filteredSkins =
     activeCategory === 'All'
@@ -88,7 +79,30 @@ export const SkinStudio: React.FC = () => {
     setSelectedSkins([]);
   };
 
-  const handleOrderSkin = () => {
+  const getAbsoluteImageUrl = (url: string) => {
+    if (url.startsWith('http')) return url;
+    const origin =
+      typeof window !== 'undefined' && window.location.origin && !window.location.origin.includes('localhost')
+        ? window.location.origin
+        : 'https://gadaliyamobile.vercel.app';
+    return `${origin}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
+  const orderSingleSkinDirect = (skin: SkinPhotoItem, targetContact: 'prakash' | 'farhan' = 'prakash') => {
+    const photoUrl = getAbsoluteImageUrl(skin.imageUrl);
+    const deliveryText =
+      deliveryType === 'online'
+        ? `🚚 Online Home Delivery (₹${skin.price} + ₹50 courier = ₹${skin.price + 50})`
+        : `🏪 Visnagar Store Pickup & Free Laser Fitting (₹${skin.price})`;
+    const phoneText = customerPhoneModel.trim() ? `\n*Phone Model:* ${customerPhoneModel}` : '';
+
+    const message = `Hello ${targetContact === 'farhan' ? 'Farhan' : 'Prakash'} bhai,\nI want to order this mobile skin with photo from Gadaliya Mobile Visnagar:\n\n*Skin Name:* ${skin.name} ${skin.nameGu ? `(${skin.nameGu})` : ''}\n*Category:* ${skin.category}\n*Price:* ₹${skin.price}${phoneText}\n*Order Type:* ${deliveryText}\n\n📸 *Skin Photo:* ${photoUrl}\n\nPlease check the photo and confirm availability!`;
+
+    const whatsappFn = targetContact === 'farhan' ? SHOP_INFO.farhanWhatsappUrl : SHOP_INFO.whatsappUrl;
+    window.open(whatsappFn(message), '_blank');
+  };
+
+  const handleOrderSkin = (targetContact: 'prakash' | 'farhan' = 'prakash') => {
     if (selectedSkins.length === 0) return;
 
     const deliveryText =
@@ -101,17 +115,18 @@ export const SkinStudio: React.FC = () => {
       : '\n*Phone Model(s):* (Will confirm in chat)';
 
     const skinsList = selectedSkins
-      .map(
-        (s, i) =>
-          `${i + 1}. *${s.name}* ${s.nameGu ? `(${s.nameGu})` : ''} - ₹${s.price} [${s.category}]`
-      )
-      .join('\n');
+      .map((s, i) => {
+        const photoUrl = getAbsoluteImageUrl(s.imageUrl);
+        return `${i + 1}. *${s.name}* ${s.nameGu ? `(${s.nameGu})` : ''}\n   💰 Price: ₹${s.price} [${s.category}]\n   📸 Photo: ${photoUrl}`;
+      })
+      .join('\n\n');
 
-    const message = `Hello Prakash bhai,\nI want to order ${selectedSkins.length} mobile skin${
+    const message = `Hello ${targetContact === 'farhan' ? 'Farhan' : 'Prakash'} bhai,\nI want to order ${selectedSkins.length} mobile skin${
       selectedSkins.length > 1 ? 's' : ''
-    } from Gadaliya Mobile Visnagar:\n\n*Selected Skins (${selectedSkins.length} items):*\n${skinsList}\n${phoneText}\n*Order Type:* ${deliveryText}\n*Total Amount:* ₹${totalPrice}\n\nPlease confirm availability and laser-cutting time!`;
+    } from Gadaliya Mobile Visnagar:\n\n*Selected Skins with Photos (${selectedSkins.length} items):*\n\n${skinsList}\n${phoneText}\n\n*Order Type:* ${deliveryText}\n*Total Amount:* ₹${totalPrice}\n\nPlease check the photos above and confirm availability!`;
 
-    window.open(SHOP_INFO.whatsappUrl(message), '_blank');
+    const whatsappFn = targetContact === 'farhan' ? SHOP_INFO.farhanWhatsappUrl : SHOP_INFO.whatsappUrl;
+    window.open(whatsappFn(message), '_blank');
   };
 
   return (
@@ -314,7 +329,7 @@ export const SkinStudio: React.FC = () => {
                     </div>
 
                     {/* Information Bar */}
-                    <div className="p-3 bg-white dark:bg-slate-900 space-y-1 border-t border-slate-100 dark:border-slate-800">
+                    <div className="p-3 bg-white dark:bg-slate-900 space-y-1.5 border-t border-slate-100 dark:border-slate-800">
                       <div className="flex items-center justify-between gap-1">
                         <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider truncate">
                           {skin.category}
@@ -331,6 +346,23 @@ export const SkinStudio: React.FC = () => {
                           {skin.nameGu}
                         </p>
                       )}
+                      <div className="pt-1.5 flex items-center justify-between gap-1 border-t border-slate-100 dark:border-slate-800/80">
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                          📸 With Photo
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            orderSingleSkinDirect(skin, 'prakash');
+                          }}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#25d366] hover:bg-[#20ba5a] text-white font-extrabold text-[10px] transition-all shadow-2xs active:scale-95 cursor-pointer"
+                          title="Direct WhatsApp chat with Prakash (+91 91733 09034)"
+                        >
+                          <MessageCircle className="w-3 h-3 fill-current" />
+                          <span>Order (9173309034)</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
@@ -611,23 +643,48 @@ export const SkinStudio: React.FC = () => {
                 </div>
               </div>
 
-              {/* Order on WhatsApp CTA */}
-              <button
-                disabled={skinCount === 0}
-                onClick={handleOrderSkin}
-                className={`w-full py-4 rounded-xl text-white font-extrabold text-sm flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-98 ${
-                  skinCount === 0
-                    ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed opacity-60'
-                    : 'bg-[#25d366] hover:bg-[#20ba5a] hover:shadow-lg'
-                }`}
-              >
-                <MessageCircle className="w-5 h-5 fill-current" />
-                <span>
-                  {skinCount === 0
-                    ? 'Select at least 1 Skin'
-                    : `Order ${skinCount} Skin${skinCount > 1 ? 's' : ''} on WhatsApp (₹${totalPrice})`}
-                </span>
-              </button>
+              {/* Order on WhatsApp CTA with Photo */}
+              <div className="space-y-2.5">
+                <button
+                  disabled={skinCount === 0}
+                  onClick={() => handleOrderSkin('prakash')}
+                  className={`w-full py-4 rounded-xl text-white font-extrabold text-sm flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-98 ${
+                    skinCount === 0
+                      ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed opacity-60'
+                      : 'bg-[#25d366] hover:bg-[#20ba5a] hover:shadow-lg'
+                  }`}
+                >
+                  <MessageCircle className="w-5 h-5 fill-current" />
+                  <span>
+                    {skinCount === 0
+                      ? 'Select at least 1 Skin'
+                      : `Send Order to Prakash (+91 91733 09034)`}
+                  </span>
+                </button>
+
+                {skinCount > 0 && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOrderSkin('prakash')}
+                      className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 font-bold text-[11px] flex items-center justify-center gap-1.5 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors shadow-2xs"
+                      title="Send order with photo to Prakash bhai"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-[#25d366] shrink-0 fill-current" />
+                      <span className="truncate">Prakash: 9173309034</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleOrderSkin('farhan')}
+                      className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 font-bold text-[11px] flex items-center justify-center gap-1.5 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors shadow-2xs"
+                      title="Send order with photo to Farhan bhai"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-[#25d366] shrink-0 fill-current" />
+                      <span className="truncate">Farhan: 6354085390</span>
+                    </button>
+                  </div>
+                )}
+              </div>
 
               <div className="text-center space-y-2">
                 <div className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -697,7 +754,31 @@ export const SkinStudio: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-4 flex gap-2">
+            {/* Direct Order on WhatsApp with Photo */}
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  orderSingleSkinDirect(zoomImage, 'prakash');
+                }}
+                className="w-full py-2.5 px-3 rounded-xl bg-[#25d366] hover:bg-[#20ba5a] text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer"
+              >
+                <MessageCircle className="w-4 h-4 fill-current shrink-0" />
+                <span>Order to Prakash (91733 09034)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  orderSingleSkinDirect(zoomImage, 'farhan');
+                }}
+                className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+              >
+                <MessageCircle className="w-4 h-4 text-[#25d366] fill-current shrink-0" />
+                <span>Order to Farhan (63540 85390)</span>
+              </button>
+            </div>
+
+            <div className="mt-2.5 flex gap-2">
               <button
                 onClick={() => {
                   toggleSkin(zoomImage);
@@ -716,7 +797,7 @@ export const SkinStudio: React.FC = () => {
                 ) : (
                   <>
                     <Plus className="w-4 h-4" />
-                    <span>+ Add to Selection</span>
+                    <span>+ Add to Multi-Selection</span>
                   </>
                 )}
               </button>

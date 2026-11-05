@@ -1,12 +1,4 @@
 import { SkinPhotoItem, RepairService } from '../types';
-import krishnaSmileImg from '../assets/images/krishna_smile_skin_1791717037114.jpg';
-import porscheGt3Img from '../assets/images/porsche_gt3_skin_1791717052065.jpg';
-import royalTigerImg from '../assets/images/royal_tiger_skin_1791717066311.jpg';
-import balKrishnaImg from '../assets/images/bal_krishna_skin_1791717077178.jpg';
-import royalHorseImg from '../assets/images/royal_horse_skin_1791717122776.jpg';
-import neonBikerImg from '../assets/images/neon_biker_skin_1791717144638.jpg';
-import stealthHoneycombImg from '../assets/images/stealth_honeycomb_skin_1791717157833.jpg';
-import travelWanderlustImg from '../assets/images/travel_wanderlust_skin_1791717169094.jpg';
 
 export const SHOP_INFO = {
   name: 'Gadaliya Mobile',
@@ -41,13 +33,13 @@ export const SHOP_INFO = {
     const text = msg
       ? encodeURIComponent(msg)
       : encodeURIComponent('Hello Prakash bhai, I want to inquire about mobile skins, lamination, and repairing at Gadaliya Mobile Visnagar.');
-    return `https://wa.me/919173309034?text=${text}`;
+    return `https://api.whatsapp.com/send?phone=919173309034&text=${text}`;
   },
   farhanWhatsappUrl: (msg?: string) => {
     const text = msg
       ? encodeURIComponent(msg)
       : encodeURIComponent('Hello Farhan bhai, I want to inquire about mobile skins, lamination, and repairing at Gadaliya Mobile Visnagar.');
-    return `https://wa.me/916354085390?text=${text}`;
+    return `https://api.whatsapp.com/send?phone=916354085390&text=${text}`;
   },
 };
 
@@ -125,89 +117,89 @@ export const SHOP_OFFERINGS: ShopOffering[] = [
 // Real Shop Skin Photos - All at ₹150 (+₹50 shipping if ordered online)
 export const PHOTO_SKINS: SkinPhotoItem[] = [
   {
-    id: 'krishna-smile',
-    name: 'Lord Krishna "Happy Things" Edition',
-    nameGu: 'શ્રી કૃષ્ણ ભક્તિ સ્કિન',
-    category: 'Devotional & Spiritual',
-    imageUrl: krishnaSmileImg || '/skins/krishna_smile.jpg',
-    description: 'Divine smiling Lord Krishna with peacock feather, sun doodle, and golden embellishments on rich matte black finish.',
-    badge: 'Best Seller',
-    price: 150,
-    shippingFee: 50,
-  },
-  {
-    id: 'bal-krishna',
-    name: 'Little Bal Gopal with Sacred Calves',
-    nameGu: 'બાલ ગોપાલ ગૌમાતા સ્કિન',
-    category: 'Devotional & Spiritual',
-    imageUrl: balKrishnaImg || '/skins/bal_krishna.jpg',
-    description: 'Adorable Little Bal Krishna with peacock feather seated on blooming green meadow surrounded by loving white calves.',
-    badge: 'Customer Favorite',
-    price: 150,
-    shippingFee: 50,
-  },
-  {
-    id: 'royal-tiger',
-    name: 'Royal Bengal Tiger Titanium Wrap',
-    nameGu: 'રોયલ ટાઇગર એડિશન',
-    category: 'Wildlife & Royalty',
-    imageUrl: royalTigerImg || '/skins/royal_tiger.jpg',
-    description: 'Fierce Bengal Tiger illustration with vibrant amber eyes and intense detailing over brushed titanium texture.',
-    badge: 'High Detail',
+    id: 'ktm-rider',
+    name: 'KTM Rider (ktm_rider)',
+    nameGu: 'કેટીએમ રાઇડર સ્કિન',
+    category: 'Superbikes & Moto',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.55.53_AM_8d3ae3a4.jpeg',
+    description: 'Real client photo: Intense night superbike KTM racer with glowing neon orange wheels on premium phone wrap.',
+    badge: 'Popular Rider',
     price: 150,
     shippingFee: 50,
   },
   {
     id: 'royal-horse',
-    name: 'Traditional Royal Marwari Ashwa Horse',
+    name: 'Royal Horse',
     nameGu: 'રોયલ મારવાડી અશ્વ સ્કિન',
     category: 'Heritage & Traditional',
-    imageUrl: royalHorseImg || '/skins/royal_horse.jpg',
-    description: 'Majestic black stallion adorned in rich traditional Indian royal embroidery saddle, jewels, and gold filigree on pearl white.',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.56.12_AM_1acb2b2d.jpeg',
+    description: 'Real client photo: Majestic black Marwari stallion with royal Indian embroidery saddle on pearl white phone wrap.',
     badge: 'Royal Heritage',
     price: 150,
     shippingFee: 50,
   },
   {
-    id: 'porsche-gt3',
-    name: 'Porsche 911 GT3 Blueprint Racing',
+    id: 'porche',
+    name: 'Porsche (porche)',
     nameGu: 'પોર્શ જીટી૩ રેસિંગ સ્કિન',
     category: 'Supercars & Racing',
-    imageUrl: porscheGt3Img || '/skins/porsche_gt3.jpg',
-    description: 'Technical aerodynamic schematic blueprint of the Porsche 911 GT3 with dual-tone white & dark racing gray finish.',
-    badge: 'Trending',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.56.26_AM_951a549f.jpeg',
+    description: 'Real client photo: Technical Porsche 911 GT3 blueprint schematic wrap with white & racing emerald gradient finish.',
+    badge: 'Speed Edition',
     price: 150,
     shippingFee: 50,
   },
   {
-    id: 'neon-biker',
-    name: 'Neon Superbike Racer In Rain',
-    nameGu: 'નિયોન બાઈકર રેસર સ્કિન',
-    category: 'Superbikes & Moto',
-    imageUrl: neonBikerImg || '/skins/neon_biker.jpg',
-    description: 'Cinematic superbike motorcycle racer in rain with glowing neon red LED lights and track reflections on orange titanium.',
-    badge: 'Gamer & Moto',
-    price: 150,
-    shippingFee: 50,
-  },
-  {
-    id: 'stealth-honeycomb',
-    name: '3D Hexagonal Honeycomb Matrix',
-    nameGu: 'સ્ટીલ્થ હનીકોમ્બ મેટ્રિક્સ',
+    id: 'premium-black',
+    name: 'Premium Black',
+    nameGu: 'પ્રીમિયમ બ્લેક હનીકોમ્બ સ્કિન',
     category: '3D Geometric & Texture',
-    imageUrl: stealthHoneycombImg || '/skins/stealth_honeycomb.jpg',
-    description: 'Precision tactile 3D hexagonal honeycomb matrix in matte stealth black. Zero fingerprints with ultra-grippy feel.',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.56.33_AM_67111775.jpeg',
+    description: 'Real client photo: Tactile stealth matte black 3D hexagonal honeycomb texture wrap with non-slip grip.',
     badge: 'Extreme Grip',
     price: 150,
     shippingFee: 50,
   },
   {
-    id: 'travel-wanderlust',
-    name: 'Vintage World Map Wanderlust Traveler',
+    id: 'premium-rose',
+    name: 'Premium Rose (Burgundy)',
+    nameGu: 'પ્રીમિયમ રોઝ બર્ગન્ડી સ્કિન',
+    category: 'Metallic & Luxury',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.56.31_AM_12869407.jpeg',
+    description: 'Real client photo: Luxurious satin metallic burgundy rose finish wrap with sleek camera ring cutout.',
+    badge: 'Luxury Matte',
+    price: 150,
+    shippingFee: 50,
+  },
+  {
+    id: 'shivay',
+    name: 'Shivay (Holy Skin)',
+    nameGu: 'શિવાય મહાદેવ ભક્તિ સ્કિન',
+    category: 'Holy Skin',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.56.09_AM_ac3c6e06.jpeg',
+    description: 'Real client photo: Divine Lord Shiva Mahadev illustration with Trishul, Crescent Moon, and glowing crimson aura.',
+    badge: 'Holy Skin',
+    price: 150,
+    shippingFee: 50,
+  },
+  {
+    id: 'krishna',
+    name: 'Krishna (Holy Skin)',
+    nameGu: 'શ્રી કૃષ્ણ બાલ ગોપાલ સ્કિન',
+    category: 'Holy Skin',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.56.04_AM_41fc4a7a.jpeg',
+    description: 'Real client photo: Adorable smiling Bal Krishna with peacock feather sketch on brushed champagne gold background.',
+    badge: 'Holy Skin',
+    price: 150,
+    shippingFee: 50,
+  },
+  {
+    id: 'traval',
+    name: 'Travel (Traval)',
     nameGu: 'ટ્રાવેલ વાંડરલસ્ટ સ્કિન',
     category: 'Travel & Lifestyle',
-    imageUrl: travelWanderlustImg || '/skins/travel_wanderlust.jpg',
-    description: 'Vintage antique world map with airplane, passport stamps, compass, and travel stickers on deep twilight purple.',
+    imageUrl: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_5.56.20_AM_a8e09e7a.jpeg',
+    description: 'Real client photo: Vintage world map with travel stamps, passport, airplane, and city direction signs on deep twilight phone wrap.',
     badge: 'Wanderlust',
     price: 150,
     shippingFee: 50,
